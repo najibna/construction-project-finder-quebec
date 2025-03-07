@@ -14,6 +14,7 @@ def load_projects():
 
 def main():
     projects = load_projects()
+    print(f"Loaded {len(projects)} projects.")
     print(projects)
 
 
