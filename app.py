@@ -1,4 +1,4 @@
-"""Load Quebec construction projects from a CSV file."""
+"""Load and clean Quebec construction projects."""
 
 from pathlib import Path
 
@@ -12,10 +12,17 @@ def load_projects():
     return pd.read_csv(HERE / "projects.csv")
 
 
+def clean_projects(projects):
+    """Strip city names so extra spaces do not break a match."""
+    projects = projects.copy()
+    projects["city"] = projects["city"].fillna("").str.strip()
+    return projects
+
+
 def main():
     projects = load_projects()
+    projects = clean_projects(projects)
     print(f"Loaded {len(projects)} projects.")
-    print(projects)
 
 
 if __name__ == "__main__":
