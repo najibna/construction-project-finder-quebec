@@ -13,9 +13,10 @@ def load_projects():
 
 
 def clean_projects(projects):
-    """Strip city names so extra spaces do not break a match."""
+    """Make city and value usable."""
     projects = projects.copy()
     projects["city"] = projects["city"].fillna("").str.strip()
+    projects["value_cad"] = pd.to_numeric(projects["value_cad"], errors="coerce")
     return projects
 
 
