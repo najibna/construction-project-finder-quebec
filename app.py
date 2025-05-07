@@ -13,10 +13,11 @@ def load_projects():
 
 
 def clean_projects(projects):
-    """Make city and value usable."""
+    """Make city, value, and bid date usable."""
     projects = projects.copy()
     projects["city"] = projects["city"].fillna("").str.strip()
     projects["value_cad"] = pd.to_numeric(projects["value_cad"], errors="coerce")
+    projects["bid_date"] = pd.to_datetime(projects["bid_date"], errors="coerce")
     return projects
 
 
