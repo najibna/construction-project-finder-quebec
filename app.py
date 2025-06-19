@@ -1,4 +1,4 @@
-"""Load and clean Quebec construction projects."""
+"""Find construction projects in Montreal."""
 
 from pathlib import Path
 
@@ -21,10 +21,17 @@ def clean_projects(projects):
     return projects.drop_duplicates(subset=["project_id"])
 
 
+def find_opportunities(projects):
+    """Keep projects whose city is Montreal."""
+    in_montreal = projects["city"].str.contains("montreal", case=False)
+    return projects[in_montreal]
+
+
 def main():
     projects = load_projects()
     projects = clean_projects(projects)
-    print(f"Loaded {len(projects)} projects.")
+    results = find_opportunities(projects)
+    print(f"Found {len(results)} Montreal projects.")
 
 
 if __name__ == "__main__":
