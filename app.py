@@ -1,10 +1,12 @@
-"""Find construction projects in Montreal."""
+"""Find construction projects in Montreal worth at least $5 million."""
 
 from pathlib import Path
 
 import pandas as pd
 
 HERE = Path(__file__).resolve().parent
+
+MIN_VALUE_CAD = 5_000_000
 
 
 def load_projects():
@@ -22,16 +24,17 @@ def clean_projects(projects):
 
 
 def find_opportunities(projects):
-    """Keep projects whose city is Montreal."""
+    """Keep Montreal projects worth at least $5 million."""
     in_montreal = projects["city"].str.contains("montreal", case=False)
-    return projects[in_montreal]
+    big_enough = projects["value_cad"] >= MIN_VALUE_CAD
+    return projects[in_montreal & big_enough]
 
 
 def main():
     projects = load_projects()
     projects = clean_projects(projects)
     results = find_opportunities(projects)
-    print(f"Found {len(results)} Montreal projects.")
+    print(f"Found {len(results)} Montreal projects worth at least $5M.")
 
 
 if __name__ == "__main__":
