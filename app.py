@@ -1,4 +1,4 @@
-"""Find construction projects in Montreal worth at least $5 million."""
+"""Find open construction projects in Montreal worth at least $5 million."""
 
 from pathlib import Path
 
@@ -24,17 +24,19 @@ def clean_projects(projects):
 
 
 def find_opportunities(projects):
-    """Keep Montreal projects worth at least $5 million."""
+    """Keep Montreal projects of $5M+ whose bid date is today or later."""
+    today = pd.Timestamp.today().normalize()
     in_montreal = projects["city"].str.contains("montreal", case=False)
     big_enough = projects["value_cad"] >= MIN_VALUE_CAD
-    return projects[in_montreal & big_enough]
+    still_open = projects["bid_date"] >= today
+    return projects[in_montreal & big_enough & still_open]
 
 
 def main():
     projects = load_projects()
     projects = clean_projects(projects)
     results = find_opportunities(projects)
-    print(f"Found {len(results)} Montreal projects worth at least $5M.")
+    print(f"Found {len(results)} open Montreal opportunities worth at least $5M.")
 
 
 if __name__ == "__main__":
