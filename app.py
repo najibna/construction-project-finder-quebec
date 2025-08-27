@@ -29,7 +29,8 @@ def find_opportunities(projects):
     in_montreal = projects["city"].str.contains("montreal", case=False)
     big_enough = projects["value_cad"] >= MIN_VALUE_CAD
     still_open = projects["bid_date"] >= today
-    return projects[in_montreal & big_enough & still_open]
+    matches = projects[in_montreal & big_enough & still_open]
+    return matches.sort_values("value_cad", ascending=False)
 
 
 def main():
@@ -37,6 +38,7 @@ def main():
     projects = clean_projects(projects)
     results = find_opportunities(projects)
     print(f"Found {len(results)} open Montreal opportunities worth at least $5M.")
+    print(results[["name", "city", "value_cad", "bid_date"]].to_string(index=False))
 
 
 if __name__ == "__main__":
