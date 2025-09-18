@@ -33,12 +33,19 @@ def find_opportunities(projects):
     return matches.sort_values("value_cad", ascending=False)
 
 
+def save_results(results):
+    """Write the matches to a CSV file."""
+    results.to_csv(HERE / "opportunities.csv", index=False)
+
+
 def main():
     projects = load_projects()
     projects = clean_projects(projects)
     results = find_opportunities(projects)
+    save_results(results)
     print(f"Found {len(results)} open Montreal opportunities worth at least $5M.")
     print(results[["name", "city", "value_cad", "bid_date"]].to_string(index=False))
+    print("Saved to opportunities.csv")
 
 
 if __name__ == "__main__":
