@@ -1,6 +1,7 @@
 """Find open construction projects in Montreal worth at least $5 million."""
 
 from pathlib import Path
+import sqlite3
 
 import pandas as pd
 
@@ -34,8 +35,11 @@ def find_opportunities(projects):
 
 
 def save_results(results):
-    """Write the matches to a CSV file."""
+    """Write the matches to a CSV file and a SQLite database."""
     results.to_csv(HERE / "opportunities.csv", index=False)
+
+    with sqlite3.connect(HERE / "projects.db") as connection:
+        results.to_sql("opportunities", connection, if_exists="replace", index=False)
 
 
 def main():
@@ -45,7 +49,7 @@ def main():
     save_results(results)
     print(f"Found {len(results)} open Montreal opportunities worth at least $5M.")
     print(results[["name", "city", "value_cad", "bid_date"]].to_string(index=False))
-    print("Saved to opportunities.csv")
+    print("Saved to opportunities.csv and projects.db")
 
 
 if __name__ == "__main__":
