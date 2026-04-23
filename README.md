@@ -44,3 +44,43 @@ Required columns in `projects.csv`:
 
 Dates use `YYYY-MM-DD`. `value_cad` is a number of Canadian dollars, with no `$` or commas.
 
+## How the code works
+
+`app.py` is four functions, called in order from `main`.
+
+### 1. `load_projects`
+
+Reads `projects.csv` into a Pandas table (a DataFrame). `project_id` is read as text so a value like `06023317` would keep its leading zero.
+
+### 2. `clean_projects`
+
+Prepares the three columns the filter uses:
+
+- **city** — fill blanks and strip spaces, so `" Montreal "` matches Montreal.
+- **value_cad** — turn the text into a number. A bad value becomes blank instead of stopping the program.
+- **bid_date** — turn `2026-10-13` into a real date. A bad date becomes blank.
+- **duplicates** — if the same `project_id` appears twice, keep the first row.
+
+### 3. `find_opportunities`
+
+A row is kept only when all three are true:
+
+1. The city contains `montreal` or `montréal` (uppercase or lowercase).
+2. `value_cad` is at least `5_000_000` (the `MIN_VALUE_CAD` constant at the top of `app.py`).
+3. `bid_date` is today or a future day. Today is midnight at the start of the current day, so a bid due today still counts.
+
+Matches are sorted with the largest dollar value first.
+
+### 4. `save_results`
+
+Writes every matching row to:
+
+- `opportunities.csv`, for opening in Excel or Numbers.
+- `projects.db`, a SQLite file. The table is named `opportunities`. Each run replaces that table, so yesterday’s matches are not mixed with today’s.
+
+SQLite needs no server. You can open `projects.db` with [DB Browser for SQLite](https://sqlitebrowser.org/) or with:
+
+```bash
+sqlite3 projects.db "SELECT name, city, value_cad, bid_date FROM opportunities;"
+```
+
