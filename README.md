@@ -84,3 +84,38 @@ SQLite needs no server. You can open `projects.db` with [DB Browser for SQLite](
 sqlite3 projects.db "SELECT name, city, value_cad, bid_date FROM opportunities;"
 ```
 
+## Why the sample returns nothing
+
+`projects.csv` has five rows. Today is after 13 October 2026, so every bid date fails the “still open” check.
+
+If those dates were still in the future, only the first two rows would match:
+
+| Project | City | Value | Why it is out (with current dates) |
+| --- | --- | --- | --- |
+| Renovation of a Building L-042 | Montreal | $13.35M | Bid date has passed |
+| Renovation of a Building L-042 Site Work | Montreal | $13.35M | Bid date has passed |
+| Portfolio of Roof Refurbishment Works | Beaumont | $80M | Not Montreal |
+| Renovation of Infrastructure at Pointe-a-la-Renommee | Gaspe | $2M | Not Montreal, and under $5M |
+| Roof Renovation at Mistouk Sports Centre | Alma | $1M | Not Montreal, and under $5M |
+
+To see a match while you are learning the code, change one Montreal `bid_date` in `projects.csv` to a future date and run `python app.py` again.
+
+## Change the rule
+
+Edit the top of `app.py`:
+
+- `MIN_VALUE_CAD = 5_000_000` — the dollar cutoff.
+- The string `"montreal|montréal"` inside `find_opportunities` — the city match. The `|` means “or”.
+
+## What you will see when it works
+
+Change one Montreal row's `bid_date` to a future date (for example `2027-01-15`) and run the program. The output looks like this:
+
+```text
+Found 2 open Montreal opportunities worth at least $5M.
+                                    name     city  value_cad   bid_date
+          Renovation of a Building L-042 Montreal   13350000 2027-01-15
+Renovation of a Building L-042 Site Work Montreal   13350000 2027-01-15
+Saved to opportunities.csv and projects.db
+```
+
