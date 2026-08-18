@@ -119,3 +119,25 @@ Renovation of a Building L-042 Site Work Montreal   13350000 2027-01-15
 Saved to opportunities.csv and projects.db
 ```
 
+## Words used in this project
+
+| Word | Plain meaning |
+| --- | --- |
+| **CSV** | A text file where each line is a row and commas separate the columns. Opens in Excel. |
+| **Pandas** | A Python library for working with tables of data. |
+| **DataFrame** | Pandas' name for a table. `projects` in `app.py` is one. |
+| **SQLite** | A database stored in one file. No server to install. |
+| **Pipeline** | Steps run in order: load, clean, filter, save. |
+| **Ingest** | Bring data into the program. Here: read the CSV. |
+| **NaN** | Pandas' marker for a blank or missing value. |
+
+## Troubleshooting
+
+| Problem | Fix |
+| --- | --- |
+| `ModuleNotFoundError: No module named 'pandas'` | Run `python -m pip install -r requirements.txt`. |
+| `externally-managed-environment` error on macOS | Use the virtual environment steps in [Run it](#run-it). |
+| `python: command not found` | Use `python3` in place of `python`. |
+| Output says 0 opportunities | Expected for the sample file. See [Why the sample returns nothing](#why-the-sample-returns-nothing). |
+| A project you expect is missing | Check its city spelling, that `value_cad` is a plain number, and that `bid_date` is `YYYY-MM-DD` and not in the past. |
+
