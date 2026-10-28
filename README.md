@@ -141,3 +141,14 @@ Saved to opportunities.csv and projects.db
 | Output says 0 opportunities | Expected for the sample file. See [Why the sample returns nothing](#why-the-sample-returns-nothing). |
 | A project you expect is missing | Check its city spelling, that `value_cad` is a plain number, and that `bid_date` is `YYYY-MM-DD` and not in the past. |
 
+## Where to go next
+
+1. Replace `projects.csv` with an authorized ConstructConnect export, or another feed you have permission to use, keeping the same columns.
+2. Add a second rule, for example only a certain `category`. It is one more line in `find_opportunities`.
+3. Run `python app.py` on a schedule (cron on Mac or Linux, Task Scheduler on Windows) so the results refresh by themselves.
+
+ConstructConnect limits automated access and some project details need a subscription. This project does not scrape the site.
+
+## Sample data
+
+The five rows are short examples shaped like public construction listings, including a link to the ConstructConnect Quebec projects page. They are for trying the pipeline. Replace the file with a current export when you have one.
